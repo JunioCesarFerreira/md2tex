@@ -41,7 +41,15 @@ func main() {
 				listType = "itemize"
 			}
 		}
-		line, listOpen, listType, mbOpen = convertMarkdownToLatex(line, listOpen, listType, mbOpen)
+		// Realiza substituições
+		line = replacerMarkdownToLatex(line)
+
+		// Realiza montagem de listas de itens
+		line, listOpen, listType = convertLists(line, listOpen, listType)
+
+		// Montagem de blocos matemáticos
+		line, mbOpen = convertMathBlocks(line, mbOpen)
+
 		if listOpen && len(line) < 3 {
 			continue
 		}
@@ -63,7 +71,7 @@ func main() {
 	writer.Flush()
 }
 
-func convertMarkdownToLatex(line string, listOpen bool, listType string, mbOpen bool) (string, bool, string, bool) {
+func replacerMarkdownToLatex(line string) string {
 	// Regex para substituições
 	replacements := []struct {
 		re   *regexp.Regexp
@@ -84,6 +92,10 @@ func convertMarkdownToLatex(line string, listOpen bool, listType string, mbOpen 
 		line = repl.re.ReplaceAllString(line, repl.repl)
 	}
 
+	return line
+}
+
+func convertLists(line string, listOpen bool, listType string) (string, bool, string) {
 	// Construindo listas
 	if strings.HasPrefix(line, `\item`) {
 		line = "\t" + line
@@ -100,14 +112,10 @@ func convertMarkdownToLatex(line string, listOpen bool, listType string, mbOpen 
 			listType = ""
 		}
 	}
-
-	// Montagem de blocos matemáticos
-	line, mbOpen = handleMathBlocks(line, mbOpen)
-
-	return line, listOpen, listType, mbOpen
+	return line, listOpen, listType
 }
 
-func handleMathBlocks(line string, mathBlockOpen bool) (string, bool) {
+func convertMathBlocks(line string, mathBlockOpen bool) (string, bool) {
 	// Realiza replaces considerando abertura e fechamento de blocos
 	if strings.Contains(line, "$$") {
 		mathBlockOpen = !mathBlockOpen
