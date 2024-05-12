@@ -69,10 +69,10 @@ func convertMarkdownToLatex(line string, listOpen bool, listType string, mbOpen 
 		re   *regexp.Regexp
 		repl string
 	}{
-		{regexp.MustCompile(`^# (.+)`), `\section{$1}`},
-		{regexp.MustCompile(`^## (.+)`), `\subsection{$1}`},
-		{regexp.MustCompile(`^### (.+)`), `\subsubsection{$1}`},
-		{regexp.MustCompile(`^#### (.+)`), `\paragraph{$1}`},
+		{regexp.MustCompile(`^# (.+)`), `\section*{$1}`},
+		{regexp.MustCompile(`^## (.+)`), `\subsection*{$1}`},
+		{regexp.MustCompile(`^### (.+)`), `\subsubsection*{$1}`},
+		{regexp.MustCompile(`^#### (.+)`), `\paragraph*{$1}`},
 		{regexp.MustCompile(`\*\*(.+?)\*\*`), `\textbf{$1}`},
 		{regexp.MustCompile(`\*(.+?)\*`), `\textit{$1}`},
 		{regexp.MustCompile(`^\d+\.\s(.+)`), `\item $1`},
