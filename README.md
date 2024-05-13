@@ -58,10 +58,6 @@ go run main.go
 \end{document}
 ```
 
-## Futuras Melhorias
-
-- Permitir uso listas dentro de listas.
-
 ## Contribuições
 
 Contribuições para o projeto são bem-vindas.
