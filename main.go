@@ -3,57 +3,11 @@ package main
 import (
 	"bufio"
 	"fmt"
-	stack "m/Stack"
+	convSta "m/conversorStack"
 	"os"
 	"regexp"
 	"strings"
 )
-
-type listStack struct {
-	Space string
-	Ts    stack.Stack
-}
-
-func NewListStack() listStack {
-	return listStack{
-		Space: "",
-		Ts:    stack.Stack{},
-	}
-}
-
-func (ls *listStack) IsListType(line string) bool {
-	sub, err := regexp.MatchString(`(^\s*\d+\.\s.+)|(^\s*-\s.+)`, line)
-	if err != nil {
-		fmt.Printf("Erro: %v\n", err)
-	}
-	return sub
-}
-
-func (ls *listStack) SetListType(line string) {
-	if ls.IsListType(line) {
-		typeCheck := regexp.MustCompile(`^\s*\d+\.\s.+`)
-		if typeCheck.MatchString(line) {
-			ls.Ts.Push("enumerate")
-		} else {
-			ls.Ts.Push("itemize")
-		}
-	}
-}
-
-func (ls *listStack) GetSpace(line string) string {
-	space := ""
-	var spaceRegex *regexp.Regexp
-	if ls.Ts.Peek() == "enumerate" {
-		spaceRegex = regexp.MustCompile(`^(\s+)\d+\.\s.+`)
-	} else {
-		spaceRegex = regexp.MustCompile(`^(\s+)-\s.+`)
-	}
-	spaceMatch := spaceRegex.FindStringSubmatch(line)
-	if len(spaceMatch) > 1 {
-		space = spaceMatch[1]
-	}
-	return space
-}
 
 func main() {
 	// Abre o arquivo Markdown para leitura
@@ -76,7 +30,7 @@ func main() {
 	writer := bufio.NewWriter(outputFile)
 
 	mbOpen := false
-	stack := NewListStack()
+	stack := convSta.NewListStack()
 	for scanner.Scan() {
 		line := scanner.Text()
 
@@ -133,14 +87,14 @@ func replacerMarkdownToLatex(line string) string {
 	return line
 }
 
-func replacerListMarkdownToLatex(line string, s *listStack) string {
+func replacerListMarkdownToLatex(line string, tab int) string {
 	// Regex para substituições
 	replacements := []struct {
 		re   *regexp.Regexp
 		repl string
 	}{
-		{regexp.MustCompile(`^\s*\d+\.\s(.+)`), strings.Repeat("\t", s.Ts.Size()) + `\item $1`},
-		{regexp.MustCompile(`^\s*- (.+)`), strings.Repeat("\t", s.Ts.Size()) + `\item $1`},
+		{regexp.MustCompile(`^\s*\d+\.\s(.+)`), strings.Repeat("\t", tab) + `\item $1`},
+		{regexp.MustCompile(`^\s*- (.+)`), strings.Repeat("\t", tab) + `\item $1`},
 	}
 
 	for _, repl := range replacements {
@@ -150,28 +104,28 @@ func replacerListMarkdownToLatex(line string, s *listStack) string {
 	return line
 }
 
-func convertLists(line string, s *listStack) string {
+func convertLists(line string, s *convSta.ListStack) string {
 	if s.IsListType(line) {
 		// Está em uma lista
 		space := s.GetSpace(line)
 		if len(space) > len(s.Space) || s.Ts.IsEmpty() {
 			// Inicio de lista
 			s.SetListType(line)
-			line = replacerListMarkdownToLatex(line, s)
+			line = replacerListMarkdownToLatex(line, s.Ts.Size())
 			newLine := strings.Repeat("\t", s.Ts.Size()-1) + "\\begin{" + s.Ts.Peek().(string) + "}\n"
 			line = newLine + line
 		} else if len(space) < len(s.Space) {
 			// Final de sub-lista
-			line = replacerListMarkdownToLatex(line, s)
+			line = replacerListMarkdownToLatex(line, s.Ts.Size())
 			line += "\n" + strings.Repeat("\t", s.Ts.Size()-1) + "\\end{" + s.Ts.Pop().(string) + "}"
 		} else {
 			// Apenas mais um item da lista
-			line = replacerListMarkdownToLatex(line, s)
+			line = replacerListMarkdownToLatex(line, s.Ts.Size())
 		}
 		s.Space = space
 	} else if len(line) > 2 && !s.Ts.IsEmpty() {
 		// Finaliza lista por detectar linha válida fora da lista
-		line = replacerListMarkdownToLatex(line, s)
+		line = replacerListMarkdownToLatex(line, s.Ts.Size())
 		line = strings.Repeat("\t", s.Ts.Size()-1) + "\\end{" + s.Ts.Pop().(string) + "}\n\n" + line
 	}
 	return line
