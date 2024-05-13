@@ -152,32 +152,27 @@ func replacerListMarkdownToLatex(line string, s *listStack) string {
 
 func convertLists(line string, s *listStack) string {
 	if s.IsListType(line) {
-		fmt.Println(line)
+		// Está em uma lista
 		space := s.GetSpace(line)
-		if s.Ts.IsEmpty() {
+		if len(space) > len(s.Space) || s.Ts.IsEmpty() {
+			// Inicio de lista
 			s.SetListType(line)
 			line = replacerListMarkdownToLatex(line, s)
 			newLine := strings.Repeat("\t", s.Ts.Size()-1) + "\\begin{" + s.Ts.Peek().(string) + "}\n"
 			line = newLine + line
+		} else if len(space) < len(s.Space) {
+			// Final de sub-lista
+			line = replacerListMarkdownToLatex(line, s)
+			line += "\n" + strings.Repeat("\t", s.Ts.Size()-1) + "\\end{" + s.Ts.Pop().(string) + "}"
 		} else {
-			if len(space) > len(s.Space) {
-				s.SetListType(line)
-				line = replacerListMarkdownToLatex(line, s)
-				newLine := strings.Repeat("\t", s.Ts.Size()-1) + "\\begin{" + s.Ts.Peek().(string) + "}\n"
-				line = newLine + line
-			} else if len(space) < len(s.Space) {
-				line = replacerListMarkdownToLatex(line, s)
-				line += "\n" + strings.Repeat("\t", s.Ts.Size()-1) + "\\end{" + s.Ts.Pop().(string) + "}"
-			} else {
-				line = replacerListMarkdownToLatex(line, s)
-			}
+			// Apenas mais um item da lista
+			line = replacerListMarkdownToLatex(line, s)
 		}
 		s.Space = space
 	} else if len(line) > 2 && !s.Ts.IsEmpty() {
+		// Finaliza lista por detectar linha válida fora da lista
 		line = replacerListMarkdownToLatex(line, s)
 		line = strings.Repeat("\t", s.Ts.Size()-1) + "\\end{" + s.Ts.Pop().(string) + "}\n\n" + line
-	} else {
-		line = replacerListMarkdownToLatex(line, s)
 	}
 	return line
 }
