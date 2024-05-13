@@ -58,10 +58,6 @@ go run main.go
 \end{document}
 ```
 
-## Future Improvements
-
-- Allow nested lists within lists.
-
 ## Contributions
 
 Contributions to the project are welcome.
