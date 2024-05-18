@@ -51,3 +51,4 @@ Understanding these concepts is crucial for developing efficient algorithms and 
     1. Sub
         - teste
 
+        - Esta é uma "string" com "aspas" que precisam ser "substituídas"
