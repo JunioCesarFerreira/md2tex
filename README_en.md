@@ -58,6 +58,11 @@ go run main.go
 \end{document}
 ```
 
+## Future Improvements
+
+- Include table conversion.
+
+
 ## Contributions
 
 Contributions to the project are welcome.

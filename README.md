@@ -58,6 +58,11 @@ go run main.go
 \end{document}
 ```
 
+## Futuras Melhorias
+
+- Incluir conversão de tabelas.
+
+
 ## Contribuições
 
 Contribuições para o projeto são bem-vindas.
