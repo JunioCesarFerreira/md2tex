@@ -112,16 +112,18 @@ func convertLists(line string, s *convSta.ListStack) string {
 	if s.IsListType(line) {
 		// Está em uma lista
 		space := s.GetSpace(line)
-		if len(space) > len(s.Space) || s.Ts.IsEmpty() {
+		fmt.Printf("line:%s\n", line)
+		fmt.Printf("space=%d\n", space)
+		if space > s.Space || s.Ts.IsEmpty() {
 			// Inicio de lista
 			s.SetListType(line)
 			line = replacerListMarkdownToLatex(line, s.Ts.Size())
 			newLine := strings.Repeat("\t", s.Ts.Size()-1) + "\\begin{" + s.Ts.Peek().(string) + "}\n"
 			line = newLine + line
-		} else if len(space) < len(s.Space) {
+		} else if space < s.Space {
 			// Final de sub-lista
-			line = replacerListMarkdownToLatex(line, s.Ts.Size())
-			line += "\n" + strings.Repeat("\t", s.Ts.Size()-1) + "\\end{" + s.Ts.Pop().(string) + "}"
+			line = replacerListMarkdownToLatex(line, s.Ts.Size()-1)
+			line = strings.Repeat("\t", s.Ts.Size()-1) + "\\end{" + s.Ts.Pop().(string) + "}\n" + line
 		} else {
 			// Apenas mais um item da lista
 			line = replacerListMarkdownToLatex(line, s.Ts.Size())

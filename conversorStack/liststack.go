@@ -7,13 +7,13 @@ import (
 )
 
 type ListStack struct {
-	Space string
+	Space int
 	Ts    stack.Stack
 }
 
 func NewListStack() ListStack {
 	return ListStack{
-		Space: "",
+		Space: 0,
 		Ts:    stack.Stack{},
 	}
 }
@@ -37,17 +37,13 @@ func (ls *ListStack) SetListType(line string) {
 	}
 }
 
-func (ls *ListStack) GetSpace(line string) string {
+func (ls *ListStack) GetSpace(line string) int {
 	space := ""
 	var spaceRegex *regexp.Regexp
-	if ls.Ts.Peek() == "enumerate" {
-		spaceRegex = regexp.MustCompile(`^(\s+)\d+\.\s.+`)
-	} else {
-		spaceRegex = regexp.MustCompile(`^(\s+)-\s.+`)
-	}
+	spaceRegex = regexp.MustCompile(`^(\s*)\d+\.\s.+|^(\s*)-\s.+`)
 	spaceMatch := spaceRegex.FindStringSubmatch(line)
 	if len(spaceMatch) > 1 {
-		space = spaceMatch[1]
+		space = spaceMatch[1] + spaceMatch[2]
 	}
-	return space
+	return len(space)
 }
