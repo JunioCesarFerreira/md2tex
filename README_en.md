@@ -62,6 +62,7 @@ go run main.go
 
 - Include table conversion.
 - Include code blocks conversion.
+- Replacement of symbols not permitted.
 
 ## Contributions
 

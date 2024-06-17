@@ -62,6 +62,8 @@ go run main.go
 
 - Incluir conversão de tabelas.
 - Incluir conversão para blocos de códigos.
+- Substituição de simbolos não permitidos (exemplo '_' por '\_').
+
 
 ## Contribuições
 
