@@ -34,6 +34,9 @@ func Convert(fileInput string, fileOutput string) {
 	for scanner.Scan() {
 		line := scanner.Text()
 
+		// Substitui caracteres especiais
+		//line = escapeLaTeXSpecialChars(line)
+
 		// Realiza substituições
 		line = replacerMarkdownToLatex(line)
 
@@ -112,8 +115,6 @@ func convertLists(line string, s *convSta.ListStack) string {
 	if s.IsListType(line) {
 		// Está em uma lista
 		space := s.GetSpace(line)
-		fmt.Printf("line:%s\n", line)
-		fmt.Printf("space=%d\n", space)
 		if space > s.Space || s.Ts.IsEmpty() {
 			// Inicio de lista
 			s.SetListType(line)
@@ -168,4 +169,25 @@ func replaceQuotes(input string) string {
 	}
 
 	return result.String()
+}
+
+func escapeLaTeXSpecialChars(input string) string {
+	// escapa os caracteres especiais em LaTeX.
+	replacements := map[string]string{
+		`\`: `\\`,
+		`{`: `\{`,
+		`}`: `\}`,
+		`$`: `\$`,
+		`%`: `\%`,
+		`#`: `\#`,
+		`&`: `\&`,
+		`_`: `\_`,
+	}
+
+	escaped := input
+	for old, new := range replacements {
+		escaped = strings.ReplaceAll(escaped, old, new)
+	}
+
+	return escaped
 }
