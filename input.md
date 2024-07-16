@@ -1,54 +1,86 @@
-# Analysis of Algorithms
+# Título Principal
 
-## Time Complexity
+Bem-vindo ao documento de teste Markdown. Este documento inclui diversos elementos comuns do Markdown para ajudar na conversão para LaTeX.
 
-In computer science, the time complexity is the computational complexity that describes the amount of time it takes to run an algorithm. Time complexity is commonly estimated by counting the number of elementary operations performed by the algorithm, assuming that each elementary operation takes a fixed amount of time to perform.
+## Seção 1: Títulos
 
-### Best, Worst, and Average Cases
+### Subtítulo 1.1
 
-- **Best case**: This is the scenario where the input is in such a state or configuration that the algorithm performs the minimum possible number of steps.
+#### Subtítulo 1.1.1
 
-- **Worst case**: Refers to the scenario where the input is such that the algorithm performs the maximum number of steps.
+## Seção 2: Ênfase
 
-- **Average case**: Assumes that the input is random. The average case can be estimated by assuming that all inputs are equally probable; then, the average number of steps for all possible inputs can be calculated.
+Texto em *itálico* e **negrito**.
 
-## Data Structures
+Texto com ambos: ***itálico e negrito***.
 
-### Arrays
+## Seção 3: Listas
 
-Arrays are a basic form of data structure used in programming. An array is a collection of elements, each identified by at least one array index or key.
+### Lista não ordenada
 
-#### Dynamic Arrays
+- Item 1
+  - Subitem 1.1
+  - Subitem 1.2
+- Item 2
+- Item 3
 
-Dynamic arrays are able to grow in size to accommodate new elements. Unlike static arrays, which have a fixed size, dynamic arrays can adjust their capacity as needed.
+### Lista ordenada
 
-1. Initialization
-2. Insertion
-3. Deletion
+1. Primeiro item
+2. Segundo item
+3. Terceiro item
+   1. Subitem 3.1
+   2. Subitem 3.2
 
-## Mathematical Formulation
+## Seção 4: Links e Imagens
 
-The relationship between the elements of an array can be described by the following equation:
+[Link para o Google](https://www.google.com)
 
-$$
-a_i = b_i + c
-$$
+![Imagem de exemplo](https://via.placeholder.com/150)
 
-Where $a_i$ is the element at the *ith* position, $b_i$ is the previous element, and $c$ is a constant value.
+## Seção 5: Bloco de Código
 
-## Conclusion
+```python
+def hello_world():
+    print("Hello, World!")
 
-Understanding these concepts is crucial for developing efficient algorithms and effectively using data structures in programming tasks.
+hello_world()
+```
 
----
+## Seção 6: Tabelas
 
-## Test
+| Nome       | Idade | Cidade       |
+|------------|-------|--------------|
+| Alice      | 30    | São Paulo    |
+| Bob        | 25    | Rio de Janeiro|
+| Charlie    | 35    | Belo Horizonte|
 
-- Topic
-    - subtopic
+## Seção 7: Citações
 
-1. Enum Topic
-    1. Sub
-        - teste
+> "A imaginação é mais importante que o conhecimento." - Albert Einstein
 
-        - Esta é uma "string" com "aspas" que precisam ser "substituídas"
+## Seção 8: Fórmulas Matemáticas
+
+Aqui está uma fórmula matemática em linha: \( E = mc^2 \).
+
+E uma fórmula em um bloco separado:
+
+\[ 
+a^2 + b^2 = c^2 
+\]
+
+## Seção 9: Blocos de Código com Sintaxe Diferente
+
+```json
+{
+  "nome": "John",
+  "idade": 30,
+  "cidade": "Nova York"
+}
+```
+
+## Seção 10: Texto Normal
+
+Este é um parágrafo comum. Ele pode conter **negrito**, *itálico*, e até [links](https://www.example.com). Markdown é muito útil para escrever textos formatados de forma simples e rápida.
+
+Fim do documento de teste.
